@@ -3,18 +3,18 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin 975050306625.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin <AWS_ACCOUNT_ID>.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
       - docker build --platform linux/amd64 -t web-app .
-      - docker tag web-app:latest 975050306625.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/web-app:latest
+      - docker tag web-app:latest <AWS_ACCOUNT_ID>.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/web-app:latest
   post_build:
     commands:
       - echo Pushing the Docker image...
-      - docker push 975050306625.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/web-app:latest
+      - docker push <AWS_ACCOUNT_ID>.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/web-app:latest
       - echo Writing image definitions...
-      - printf '[{"name":"WebApp","imageUri":"%s"}]' 975050306625.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/web-app:latest > imagedefinitions.json
+      - printf '[{"name":"WebApp","imageUri":"%s"}]' <AWS_ACCOUNT_ID>.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/web-app:latest > imagedefinitions.json
 artifacts:
   files: imagedefinitions.json
